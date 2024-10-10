@@ -1,4 +1,7 @@
-﻿namespace MauiAppBuscaCepLocal
+﻿using MauiAppBuscaCepLocal.Model;
+using MauiAppBuscaCepLocal.Services;
+
+namespace MauiAppBuscaCepLocal
 {
     public partial class MainPage : ContentPage
     {
@@ -21,8 +24,18 @@
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private async void Button_Clicked(object sender, EventArgs e)
         {
+            try
+            {
+                Endereco? dados_endereco =
+                    await DataServiceCep.GetEnderecoByCep(txt_cep.Text);
+
+                BindindContext = dados_endereco;
+            }
+            catch (Exception ex) {
+                await DisplayAlert("Ops", ex.Message, "OK");
+            }
 
         }
     }
